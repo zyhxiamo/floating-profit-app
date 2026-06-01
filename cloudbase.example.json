@@ -1,0 +1,9 @@
+{
+  "envId": "your-cloudbase-env-id",
+  "adminEmail": "your-admin-email@example.com",
+  "apiBaseUrl": "https://your-api-domain.example.com",
+  "authGatewayUrl": "https://your-env-id.api.tcloudbasegateway.com",
+  "hostingUrl": "https://your-static-site.example.com",
+  "downloadUrl": "https://your-static-site.example.com/downloads/floating-profit-app-green-latest.zip",
+  "baiduDownloadUrl": ""
+}

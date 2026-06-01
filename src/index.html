@@ -117,15 +117,16 @@
       <dialog class="modal" id="feedbackModal" aria-labelledby="feedbackTitle">
         <form method="dialog" class="modal-card feedback-card" id="feedbackForm">
           <button class="modal-close" value="close" aria-label="关闭">×</button>
-          <p class="eyebrow">产品反馈</p>
-          <h2 id="feedbackTitle">修改意见</h2>
-          <p class="modal-copy">提交后会打开在线反馈页，方便跟踪处理进度和后续版本更新。</p>
-          <textarea id="feedbackText" rows="6" placeholder="写下你希望改进的地方，例如：折叠态再小一点、增加分时图、支持分组自选..."></textarea>
+          <p class="eyebrow">使用评价</p>
+          <h2 id="feedbackTitle">说说使用感受</h2>
+          <p class="modal-copy">评价提交后会进入审核，通过后可能展示在浮盈 app 官网。</p>
+          <input id="feedbackNickname" maxlength="20" placeholder="你的昵称" />
+          <textarea id="feedbackText" rows="5" maxlength="100" placeholder="写下你的使用感受，最多 100 字。"></textarea>
           <div class="modal-actions">
             <button type="button" id="saveFeedbackButton">保存草稿</button>
-            <button type="button" id="submitFeedbackButton">提交反馈</button>
+            <button type="button" id="submitFeedbackButton">提交评价</button>
           </div>
-          <p class="form-note" id="feedbackNote">可以先保存草稿，也可以提交在线反馈。</p>
+          <p class="form-note" id="feedbackNote">网络不可用时，可以先保存到本机。</p>
         </form>
       </dialog>
     </main>

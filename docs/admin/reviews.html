@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>浮盈 app 评价审核</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="./reviews.css" />
+  </head>
+  <body>
+    <main class="admin-shell">
+      <header class="admin-header">
+        <div>
+          <p class="eyebrow">浮盈 app</p>
+          <h1>评价审核</h1>
+        </div>
+        <button class="secondary hidden" id="logoutButton" type="button">退出登录</button>
+      </header>
+
+      <section class="admin-panel" id="loginPanel">
+        <h2>管理员登录</h2>
+        <p>输入部署时配置的管理员邮箱，获取验证码。</p>
+        <div class="admin-form">
+          <input id="emailInput" type="email" placeholder="管理员邮箱" />
+          <button class="primary" id="sendCodeButton" type="button">发送验证码</button>
+          <input id="codeInput" class="hidden" inputmode="numeric" maxlength="8" placeholder="邮箱验证码" />
+          <button class="primary hidden" id="verifyCodeButton" type="button">验证并登录</button>
+        </div>
+        <p class="admin-note" id="loginNote"></p>
+      </section>
+
+      <section class="hidden" id="reviewPanel">
+        <div class="admin-tabs">
+          <button class="secondary active" type="button" data-status="pending">待审核</button>
+          <button class="secondary" type="button" data-status="approved">已展示</button>
+          <button class="secondary" type="button" data-status="rejected">已删除</button>
+        </div>
+        <div class="admin-list" id="adminReviewList"></div>
+      </section>
+    </main>
+    <script src="../config.js"></script>
+    <script src="./reviews.js"></script>
+  </body>
+</html>

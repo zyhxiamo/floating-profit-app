@@ -1,7 +1,9 @@
-const { app, BrowserWindow, globalShortcut, ipcMain, screen, shell } = require("electron");
+const { app, BrowserWindow, globalShortcut, ipcMain, screen } = require("electron");
+const http = require("http");
 const https = require("https");
 const path = require("path");
 const { TextDecoder } = require("util");
+const { API_BASE_URL } = require("./runtime-config");
 
 const COLLAPSED_SIZE = { width: 218, height: 48 };
 const EXPANDED_SIZE = { width: 380, height: 620 };
@@ -154,6 +156,52 @@ function requestJson(url) {
   });
 }
 
+function postJson(url, payload) {
+  return new Promise((resolve, reject) => {
+    const target = new URL(url);
+    const body = JSON.stringify(payload);
+    const transport = target.protocol === "http:" ? http : https;
+    const request = transport.request({
+      protocol: target.protocol,
+      hostname: target.hostname,
+      port: target.port || (target.protocol === "http:" ? 80 : 443),
+      path: `${target.pathname}${target.search}`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Content-Length": Buffer.byteLength(body),
+        "User-Agent": "floating-profit-app/0.2.1"
+      }
+    }, (response) => {
+      let responseBody = "";
+      response.setEncoding("utf8");
+      response.on("data", (chunk) => {
+        responseBody += chunk;
+      });
+      response.on("end", () => {
+        let parsed = {};
+        try {
+          parsed = responseBody ? JSON.parse(responseBody) : {};
+        } catch {
+          parsed = {};
+        }
+        if (response.statusCode >= 200 && response.statusCode < 300) {
+          resolve(parsed);
+          return;
+        }
+        reject(new Error(parsed.message || `request failed: ${response.statusCode}`));
+      });
+    });
+
+    request.setTimeout(15000, () => {
+      request.destroy(new Error("request timeout"));
+    });
+    request.on("error", reject);
+    request.write(body);
+    request.end();
+  });
+}
+
 function tencentSymbol(code, isIndex = false) {
   const indexSymbols = {
     "000001": "sh000001",
@@ -280,11 +328,10 @@ ipcMain.handle("market:get-stocks", async (_event, codes) => {
   return getQuotes(cleanCodes);
 });
 
-ipcMain.handle("app:submit-feedback", async (_event, text) => {
-  const feedback = String(text || "").trim().slice(0, 4000);
-  const query = new URLSearchParams({
-    title: "[反馈] 浮盈 app 使用建议",
-    body: `## 反馈内容\n\n${feedback}\n\n## 使用环境\n\n- 浮盈 app 版本：0.2.0\n- 系统：Windows`
-  });
-  return shell.openExternal(`https://github.com/zyhxiamo/floating-profit-app/issues/new?${query.toString()}`);
+ipcMain.handle("app:submit-review", async (_event, review) => {
+  const nickname = String(review?.nickname || "").trim().slice(0, 20);
+  const content = String(review?.content || "").trim().slice(0, 100);
+  if (!nickname || !content) throw new Error("请填写昵称和评价内容。");
+  if (!API_BASE_URL) throw new Error("评价服务正在准备中，请先保存草稿。");
+  return postJson(`${API_BASE_URL}/api/reviews`, { nickname, content });
 });

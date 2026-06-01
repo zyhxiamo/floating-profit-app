@@ -1,0 +1,17 @@
+{
+  "envId": "{{CLOUDBASE_ENV_ID}}",
+  "functionRoot": "./cloudfunctions",
+  "functions": [
+    {
+      "name": "api",
+      "runtime": "Nodejs20.19",
+      "handler": "index.main",
+      "timeout": 15,
+      "envVariables": {
+        "ADMIN_EMAIL": "{{ADMIN_EMAIL}}",
+        "AUTH_GATEWAY_URL": "{{AUTH_GATEWAY_URL}}",
+        "DOWNLOAD_URL": "{{DOWNLOAD_URL}}"
+      }
+    }
+  ]
+}

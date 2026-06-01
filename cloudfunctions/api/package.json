@@ -1,0 +1,9 @@
+{
+  "name": "floating-profit-api",
+  "version": "0.2.1",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "@cloudbase/node-sdk": "^3.18.0"
+  }
+}

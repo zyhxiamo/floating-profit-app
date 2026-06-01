@@ -1,6 +1,6 @@
 {
   "name": "floating-profit-app",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "浮盈 app - Apple-style desktop floating widget for A-share watchlists.",
   "author": "浮盈 app",
   "main": "src/main.js",

@@ -1,36 +1,63 @@
 # 浮盈 app 发布流程
 
-## 官网
+## 1. 生成绿色独立版
 
-推送 `main` 分支后，GitHub Actions 会自动发布 `docs/` 下的网站：
-
-```text
-https://zyhxiamo.github.io/floating-profit-app/
-```
-
-首次使用时，需要在 GitHub 仓库打开：
+双击：
 
 ```text
-Settings -> Pages -> Source: GitHub Actions
+生成绿色独立版.bat
 ```
 
-## Windows 下载包
+脚本会生成两个文件：
 
-本地生成绿色独立版：
+```text
+release/floating-profit-app-green-0.2.1.zip
+release/floating-profit-app-green-latest.zip
+```
+
+带版本号的 ZIP 用于归档，`latest` ZIP 用于官网固定下载地址。
+
+## 2. 发布 GitHub 备用版本
 
 ```powershell
-.\生成绿色独立版.bat
+git add .
+git commit -m "发布浮盈 app 0.2.1"
+git push
+git tag v0.2.1
+git push origin v0.2.1
 ```
 
-正式发布时，推送版本标签：
+GitHub Actions 会更新备用官网，并将 ZIP 上传到 Releases。Release 标题只显示版本号。
+
+## 3. 首次部署国内 CloudBase 版本
+
+1. 注册或登录腾讯云账号。
+2. 创建 CloudBase 环境。
+3. 复制 `cloudbase.example.json` 为 `cloudbase.local.json`，填写环境 ID、管理员邮箱、API 地址和静态托管下载地址。
+4. 运行：
 
 ```powershell
-git tag v0.2.0
-git push origin v0.2.0
+npx -y -p @cloudbase/cli cloudbase login
 ```
 
-GitHub Actions 会自动打包并上传到 Releases。官网按钮始终指向最新版本下载页。
+5. 双击：
 
-## 用户反馈
+```text
+部署国内版.bat
+```
 
-用户可以通过应用标题栏的“议”打开在线反馈页。维护时在仓库的 Issues 页面查看、回复和整理意见。
+脚本会写入 CloudBase 地址、重新打包应用、部署云函数、开启邮箱登录、上传官网和最新 ZIP。
+
+## 4. CloudBase 控制台检查
+
+- 确认数据库已创建 `reviews` 和 `metrics` 集合。首次提交评价和首次下载会自动写入。
+- 确认 API HTTP 路径为 `/api`。
+- 使用隐藏管理页审核评价：
+
+```text
+/admin/reviews.html
+```
+
+## 5. 后续版本
+
+更新版本号、生成绿色包、推送 GitHub 标签，再运行 `部署国内版.bat`。官网固定下载地址无需修改。

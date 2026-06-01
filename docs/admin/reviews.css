@@ -1,0 +1,86 @@
+body {
+  min-height: 100vh;
+}
+
+.admin-shell {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 42px 18px 72px;
+}
+
+.admin-header,
+.admin-tabs,
+.admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-header {
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.admin-panel,
+.admin-review {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--panel);
+}
+
+.admin-form,
+.admin-list {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-form {
+  max-width: 420px;
+}
+
+.admin-form input {
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.admin-form button,
+.admin-tabs button,
+.admin-actions button {
+  cursor: pointer;
+}
+
+.admin-note,
+.admin-meta {
+  color: var(--muted);
+}
+
+.admin-tabs {
+  margin-bottom: 14px;
+}
+
+.admin-tabs .active {
+  background: var(--panel-strong);
+}
+
+.admin-review {
+  display: grid;
+  gap: 12px;
+}
+
+.admin-review p {
+  margin-bottom: 0;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.admin-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+}

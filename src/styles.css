@@ -581,16 +581,25 @@ h1 {
   cursor: pointer;
 }
 
+.feedback-card input,
 .feedback-card textarea {
   width: 100%;
-  resize: vertical;
-  min-height: 130px;
   padding: 12px;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.13);
   color: var(--text);
   background: rgba(0, 0, 0, 0.2);
   outline: none;
+}
+
+.feedback-card input {
+  height: 40px;
+  margin-bottom: 8px;
+}
+
+.feedback-card textarea {
+  resize: vertical;
+  min-height: 112px;
 }
 
 .modal-actions {

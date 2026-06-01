@@ -16,5 +16,5 @@ contextBridge.exposeInMainWorld("marketData", {
 });
 
 contextBridge.exposeInMainWorld("appActions", {
-  submitFeedback: (text) => ipcRenderer.invoke("app:submit-feedback", text)
+  submitReview: (review) => ipcRenderer.invoke("app:submit-review", review)
 });

@@ -41,6 +41,7 @@ const refreshButton = document.getElementById("refreshButton");
 const hideButton = document.getElementById("hideButton");
 const feedbackButton = document.getElementById("feedbackButton");
 const feedbackModal = document.getElementById("feedbackModal");
+const feedbackNickname = document.getElementById("feedbackNickname");
 const feedbackText = document.getElementById("feedbackText");
 const saveFeedbackButton = document.getElementById("saveFeedbackButton");
 const submitFeedbackButton = document.getElementById("submitFeedbackButton");
@@ -73,25 +74,28 @@ function saveSettings() {
   localStorage.setItem("displaySettings", JSON.stringify(settings));
 }
 
-function readFeedbackItems() {
+function saveFeedbackDraft() {
+  const nickname = feedbackNickname.value.trim().slice(0, 20);
+  const content = feedbackText.value.trim().slice(0, 100);
+  if (!nickname && !content) return false;
+  localStorage.setItem(feedbackStoreKey, JSON.stringify({ nickname, content }));
+  return true;
+}
+
+function loadFeedbackDraft() {
   try {
-    const items = JSON.parse(localStorage.getItem(feedbackStoreKey) || "[]");
-    return Array.isArray(items) ? items : [];
+    const draft = JSON.parse(localStorage.getItem(feedbackStoreKey) || "{}");
+    feedbackNickname.value = String(draft.nickname || "").slice(0, 20);
+    feedbackText.value = String(draft.content || "").slice(0, 100);
   } catch {
-    return [];
+    localStorage.removeItem(feedbackStoreKey);
   }
 }
 
-function saveFeedback(text) {
-  const trimmed = text.trim();
-  if (!trimmed) return false;
-  const items = readFeedbackItems();
-  items.unshift({
-    text: trimmed,
-    createdAt: new Date().toISOString()
-  });
-  localStorage.setItem(feedbackStoreKey, JSON.stringify(items.slice(0, 50)));
-  return true;
+function clearFeedbackDraft() {
+  localStorage.removeItem(feedbackStoreKey);
+  feedbackNickname.value = "";
+  feedbackText.value = "";
 }
 
 function quoteNumber(value) {
@@ -370,20 +374,39 @@ function updateSetting(key, value, options = {}) {
 expandFromCompact.addEventListener("click", () => setExpanded(true));
 collapseButton.addEventListener("click", () => setExpanded(false));
 hideButton.addEventListener("click", () => window.floatWindow?.hide());
-feedbackButton.addEventListener("click", () => feedbackModal.showModal());
+feedbackButton.addEventListener("click", () => {
+  loadFeedbackDraft();
+  feedbackModal.showModal();
+});
 saveFeedbackButton.addEventListener("click", () => {
-  const saved = saveFeedback(feedbackText.value);
-  feedbackNote.textContent = saved ? "草稿已保存在本机。" : "先写一点反馈内容再保存。";
+  const saved = saveFeedbackDraft();
+  feedbackNote.textContent = saved ? "草稿已保存在本机。" : "先填写昵称或评价内容再保存。";
 });
 submitFeedbackButton.addEventListener("click", async () => {
-  const text = feedbackText.value.trim();
-  if (!text) {
-    feedbackNote.textContent = "先写一点反馈内容再提交。";
+  const review = {
+    nickname: feedbackNickname.value.trim(),
+    content: feedbackText.value.trim()
+  };
+  if (!review.nickname || !review.content) {
+    feedbackNote.textContent = "请填写昵称和评价内容。";
     return;
   }
-  saveFeedback(text);
-  feedbackNote.textContent = "正在打开在线反馈页...";
-  await window.appActions?.submitFeedback(text);
+  if (review.content.length > 100) {
+    feedbackNote.textContent = "评价内容最多 100 字。";
+    return;
+  }
+  saveFeedbackDraft();
+  feedbackNote.textContent = "正在提交评价...";
+  submitFeedbackButton.disabled = true;
+  try {
+    await window.appActions?.submitReview(review);
+    clearFeedbackDraft();
+    feedbackNote.textContent = "评价已提交，审核通过后会展示在官网。";
+  } catch (error) {
+    feedbackNote.textContent = error?.message || "暂时无法提交，草稿已保存在本机。";
+  } finally {
+    submitFeedbackButton.disabled = false;
+  }
 });
 refreshButton.addEventListener("click", () => {
   refreshStocks();

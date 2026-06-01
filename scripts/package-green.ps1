@@ -8,6 +8,7 @@ $releaseRoot = Join-Path $projectRoot "release"
 $unpackedPath = Join-Path $releaseRoot "win-unpacked"
 $version = (Get-Content -Raw (Join-Path $projectRoot "package.json") | ConvertFrom-Json).version
 $zipPath = Join-Path $releaseRoot "floating-profit-app-green-$version.zip"
+$latestZipPath = Join-Path $releaseRoot "floating-profit-app-green-latest.zip"
 
 function Assert-InRelease([string]$Path) {
   $resolvedRelease = [System.IO.Path]::GetFullPath($releaseRoot)
@@ -19,6 +20,7 @@ function Assert-InRelease([string]$Path) {
 
 Assert-InRelease $unpackedPath
 Assert-InRelease $zipPath
+Assert-InRelease $latestZipPath
 
 if (-not $SkipBuild) {
   if (Test-Path -LiteralPath $unpackedPath) {
@@ -57,4 +59,6 @@ if (Test-Path -LiteralPath $zipPath) {
   Remove-Item -LiteralPath $zipPath -Force
 }
 Compress-Archive -Path (Join-Path $unpackedPath "*") -DestinationPath $zipPath -CompressionLevel Optimal
+Copy-Item -LiteralPath $zipPath -Destination $latestZipPath -Force
 Write-Output "PACKAGE=$zipPath"
+Write-Output "LATEST_PACKAGE=$latestZipPath"
