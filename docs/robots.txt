@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zyhxiamo.github.io/floating-profit-app/sitemap.xml

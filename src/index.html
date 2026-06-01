@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>浮盈 app</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main id="app" class="app collapsed">
+      <section class="ticker-strip" id="tickerStrip" aria-label="折叠行情">
+        <div class="drag-zone compact-drag"></div>
+        <button class="mini-button expand-hit" id="expandFromCompact" aria-label="展开">⌃</button>
+        <div class="compact-stock">
+          <div class="compact-title">
+            <span class="compact-name" id="compactName">贵州茅台</span>
+            <span class="compact-code" id="compactCode">600519</span>
+          </div>
+          <div class="compact-market">
+            <strong id="compactPrice">1842.50</strong>
+            <span id="compactChange" class="market-up">+1.24%</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-label="展开行情面板">
+        <header class="panel-header">
+          <div class="drag-zone panel-drag"></div>
+          <div>
+            <p class="eyebrow">A 股自选</p>
+            <h1>浮盈 app</h1>
+          </div>
+          <div class="header-actions">
+            <button class="icon-button" id="feedbackButton" aria-label="反馈意见">议</button>
+            <button class="icon-button" id="refreshButton" aria-label="刷新行情">↻</button>
+            <button class="icon-button" id="hideButton" aria-label="隐藏窗口">×</button>
+            <button class="icon-button" id="collapseButton" aria-label="折叠">⌄</button>
+          </div>
+        </header>
+
+        <section class="market-board" aria-label="A 股大盘">
+          <article class="index-card">
+            <span id="indexName0">上证指数</span>
+            <strong id="indexPrice0">--</strong>
+            <em id="indexChange0" class="market-flat">--</em>
+          </article>
+          <article class="index-card">
+            <span id="indexName1">深证成指</span>
+            <strong id="indexPrice1">--</strong>
+            <em id="indexChange1" class="market-flat">--</em>
+          </article>
+          <article class="index-card">
+            <span id="indexName2">创业板指</span>
+            <strong id="indexPrice2">--</strong>
+            <em id="indexChange2" class="market-flat">--</em>
+          </article>
+        </section>
+
+        <section class="hero-quote" id="heroQuote">
+          <div class="hero-accent" aria-hidden="true"></div>
+          <div class="hero-main">
+            <div class="hero-name" id="heroName">贵州茅台</div>
+            <div class="hero-code" id="heroCode">600519</div>
+          </div>
+          <div class="hero-value">
+            <strong id="heroPrice">1842.50</strong>
+            <span id="heroChange" class="market-up">+22.40 +1.24%</span>
+          </div>
+        </section>
+
+        <section class="watchlist" id="watchlist" aria-label="自选列表"></section>
+
+        <section class="controls" aria-label="显示设置">
+          <div class="control-row">
+            <label for="fontScale">字号</label>
+            <div class="step-control">
+              <button class="step-button" type="button" data-setting="fontScale" data-step="-5">-</button>
+              <input id="fontScale" type="range" min="60" max="120" value="82" />
+              <button class="step-button" type="button" data-setting="fontScale" data-step="5">+</button>
+            </div>
+          </div>
+          <div class="control-row">
+            <label for="uiScale">界面</label>
+            <div class="step-control">
+              <button class="step-button" type="button" data-setting="uiScale" data-step="-5">-</button>
+              <input id="uiScale" type="range" min="84" max="122" value="90" />
+              <button class="step-button" type="button" data-setting="uiScale" data-step="5">+</button>
+            </div>
+          </div>
+          <div class="preset-row">
+            <button type="button" data-preset="small">小</button>
+            <button type="button" data-preset="normal">中</button>
+            <button type="button" data-preset="large">大</button>
+            <button type="button" data-preset="reset">重置</button>
+          </div>
+          <label class="toggle-row">
+            <span>涨跌颜色</span>
+            <input id="colorToggle" type="checkbox" checked />
+          </label>
+        </section>
+
+        <form class="add-form" id="addForm">
+          <label for="stockInput">添加自选</label>
+          <div class="add-row">
+            <input id="stockInput" inputmode="numeric" maxlength="6" placeholder="输入代码 600519" />
+            <button type="submit">添加</button>
+          </div>
+          <p class="form-note" id="formNote">支持 6 位 A 股代码。当前为假数据演示。</p>
+        </form>
+
+        <footer class="status-bar">
+          <span id="updatedAt">最后更新 --:--:--</span>
+          <span>Alt+Q 隐藏</span>
+        </footer>
+      </section>
+
+      <dialog class="modal" id="feedbackModal" aria-labelledby="feedbackTitle">
+        <form method="dialog" class="modal-card feedback-card" id="feedbackForm">
+          <button class="modal-close" value="close" aria-label="关闭">×</button>
+          <p class="eyebrow">产品反馈</p>
+          <h2 id="feedbackTitle">修改意见</h2>
+          <p class="modal-copy">提交后会打开在线反馈页，方便跟踪处理进度和后续版本更新。</p>
+          <textarea id="feedbackText" rows="6" placeholder="写下你希望改进的地方，例如：折叠态再小一点、增加分时图、支持分组自选..."></textarea>
+          <div class="modal-actions">
+            <button type="button" id="saveFeedbackButton">保存草稿</button>
+            <button type="button" id="submitFeedbackButton">提交反馈</button>
+          </div>
+          <p class="form-note" id="feedbackNote">可以先保存草稿，也可以提交在线反馈。</p>
+        </form>
+      </dialog>
+    </main>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>

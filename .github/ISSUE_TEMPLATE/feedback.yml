@@ -1,0 +1,35 @@
+name: 浮盈 app 使用反馈
+description: 提交功能建议、界面意见或问题报告
+title: "[反馈] "
+labels:
+  - feedback
+body:
+  - type: dropdown
+    id: category
+    attributes:
+      label: 反馈类型
+      options:
+        - 功能建议
+        - 界面优化
+        - 行情数据问题
+        - 使用问题
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: 具体内容
+      description: 请描述你遇到的问题或希望增加的功能。
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 软件版本
+      placeholder: 例如 0.2.0
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 截图
+      description: 可以直接拖入截图，便于定位问题。
