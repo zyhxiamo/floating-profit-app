@@ -1,0 +1,12 @@
+{
+  "folders": [
+    {
+      "name": "浮盈 app",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.encoding": "utf8",
+    "git.openRepositoryInParentFolders": "always"
+  }
+}
