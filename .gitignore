@@ -10,4 +10,6 @@ cloudbaserc.generated.json
 video-tools/
 video/*.mp4
 video/*.png
+video/*.wav
+video/archive/
 video/preview/
