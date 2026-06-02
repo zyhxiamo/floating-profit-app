@@ -7,3 +7,7 @@ out/
 Thumbs.db
 cloudbase.local.json
 cloudbaserc.generated.json
+video-tools/
+video/*.mp4
+video/*.png
+video/preview/

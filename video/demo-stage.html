@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./demo-stage.css" />
+    <title>浮盈 app 视频演示</title>
+  </head>
+  <body>
+    <main class="stage">
+      <section class="intro">
+        <img src="../src/assets/app-icon.png" alt="" />
+        <p>A 股桌面悬浮行情</p>
+        <h1>浮盈 app</h1>
+        <span>浮在桌面边缘，一眼看清自选股。</span>
+      </section>
+
+      <section class="desktop">
+        <div class="desktop-copy">
+          <p>A 股桌面悬浮行情</p>
+          <h2>为盯盘做减法。</h2>
+          <span>桌面置顶 · 折叠轮动 · 快捷隐藏</span>
+        </div>
+
+        <article class="widget expanded">
+          <header>
+            <div>
+              <small>A 股自选</small>
+              <strong>浮盈 app</strong>
+            </div>
+            <nav><i>议</i><i>↻</i><i>×</i><i>⌄</i></nav>
+          </header>
+          <div class="indexes">
+            <div><small>上证指数</small><strong>3126.42</strong><em>+0.42%</em></div>
+            <div><small>深证成指</small><strong>9860.18</strong><em class="down">-0.16%</em></div>
+            <div><small>创业板指</small><strong>1988.05</strong><em>+0.28%</em></div>
+          </div>
+          <div class="hero-stock">
+            <div><b id="heroName">贵州茅台</b><small id="heroCode">600519</small></div>
+            <div><strong id="heroPrice">1548.20</strong><em id="heroPct">+0.62%</em></div>
+          </div>
+          <div class="watchlist">
+            <div><span>贵州茅台</span><small>600519</small><b>1548.20</b><em>+0.62%</em></div>
+            <div><span>宁德时代</span><small>300750</small><b>264.36</b><em class="down">-0.35%</em></div>
+            <div class="new-stock"><span>比亚迪</span><small>002594</small><b>326.80</b><em>+1.16%</em></div>
+          </div>
+          <div class="controls">
+            <div><b>字号</b><span>−</span><i></i><span>＋</span></div>
+            <div><b>界面</b><span>−</span><i></i><span>＋</span></div>
+            <div class="presets"><u>小</u><u>中</u><u>大</u><u>重置</u></div>
+            <div class="color"><b>涨跌颜色</b><u></u></div>
+          </div>
+          <div class="add">
+            <b>添加自选</b>
+            <div><span id="codeInput">输入代码 600519</span><i>添加</i></div>
+            <small id="addNote">支持 6 位 A 股代码。</small>
+          </div>
+          <footer><span>最后更新 10:28:36</span><b>Alt+Q 隐藏</b></footer>
+        </article>
+
+        <article class="compact">
+          <i>⌃</i>
+          <div><b id="compactName">贵州茅台</b><small id="compactCode">600519</small></div>
+          <strong id="compactPrice">1548.20</strong>
+          <em id="compactPct">+0.62%</em>
+        </article>
+
+        <div class="hotkey"><kbd>Alt</kbd><b>+</b><kbd>Q</kbd></div>
+      </section>
+
+      <section class="outro">
+        <img src="../src/assets/app-icon.png" alt="" />
+        <h2>浮盈 app</h2>
+        <p>为盯盘做减法。</p>
+        <strong>评论区获取</strong>
+      </section>
+
+      <div class="caption" id="caption"></div>
+      <small class="disclaimer">行情仅作功能演示，不构成投资建议。</small>
+    </main>
+    <script src="./demo-stage.js"></script>
+  </body>
+</html>
