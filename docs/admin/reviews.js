@@ -21,7 +21,9 @@
   async function readJson(url, options = {}) {
     const response = await fetch(url, options);
     const payload = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(payload.message || `请求失败：${response.status}`);
+    if (!response.ok) {
+      throw new Error(payload.message || payload.error_description || payload.error || `请求失败：${response.status}`);
+    }
     return payload;
   }
 
