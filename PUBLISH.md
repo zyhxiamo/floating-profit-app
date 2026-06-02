@@ -46,11 +46,12 @@ npx -y -p @cloudbase/cli cloudbase login
 部署国内版.bat
 ```
 
-脚本会写入 CloudBase 地址、重新打包应用、部署云函数、开启邮箱登录、上传官网和最新 ZIP。
+脚本会写入 CloudBase 地址、重新打包应用、部署云函数、尝试开启邮箱登录、上传官网和最新 ZIP。
 
 ## 4. CloudBase 控制台检查
 
-- 确认数据库已创建 `reviews` 和 `metrics` 集合。首次提交评价和首次下载会自动写入。
+- 首次上线时，在 CloudBase 控制台打开“身份认证 → 登录方式 → 邮箱验证码”，启用内置邮件代发。这个步骤只需操作一次。
+- 确认数据库已创建 `reviews` 和 `metrics` 集合。云函数会自动创建缺少的集合。
 - 确认 API HTTP 路径为 `/api`。
 - 使用隐藏管理页审核评价：
 

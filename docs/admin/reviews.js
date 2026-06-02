@@ -11,7 +11,7 @@
   const logoutButton = document.getElementById("logoutButton");
   const loginNote = document.getElementById("loginNote");
   const adminReviewList = document.getElementById("adminReviewList");
-  let verificationToken = "";
+  let verificationId = "";
   let selectedStatus = "pending";
 
   function showNote(message) {
@@ -43,9 +43,9 @@
     const payload = await readJson(`${authGatewayUrl}/auth/v1/verification`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, target: "USER" })
+      body: JSON.stringify({ email, target: "ANY" })
     });
-    verificationToken = payload.verification_token;
+    verificationId = payload.verification_id;
     codeInput.classList.remove("hidden");
     verifyCodeButton.classList.remove("hidden");
     showNote("验证码已发送，请查看邮箱。");
@@ -58,20 +58,23 @@
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        verification_token: verificationToken,
+        verification_id: verificationId,
         verification_code: verificationCode
       })
     });
     const loginOptions = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, verification_token: verified.verification_token })
+      body: JSON.stringify({ verification_token: verified.verification_token })
     };
     let signedIn;
     try {
       signedIn = await readJson(`${authGatewayUrl}/auth/v1/signin`, loginOptions);
     } catch {
-      signedIn = await readJson(`${authGatewayUrl}/auth/v1/signup`, loginOptions);
+      signedIn = await readJson(`${authGatewayUrl}/auth/v1/signup`, {
+        ...loginOptions,
+        body: JSON.stringify({ email, verification_token: verified.verification_token })
+      });
     }
     sessionStorage.setItem("floatingProfitAdminToken", signedIn.access_token);
     await showReviews();

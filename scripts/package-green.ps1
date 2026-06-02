@@ -51,7 +51,7 @@ Floating Profit App - Windows green package
 2. The window stays on top by default.
 3. Press Alt+Q to hide or show the window.
 4. Expand the window to add A-share stock codes.
-5. Click the feedback button in the title bar to submit feedback online.
+5. Click the review button in the title bar to submit a visitor review online.
 '@
 Set-Content -LiteralPath (Join-Path $unpackedPath "README.txt") -Value $readme -Encoding ascii
 

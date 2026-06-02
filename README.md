@@ -4,9 +4,11 @@
 
 ## 官网
 
-[https://zyhxiamo.github.io/floating-profit-app/](https://zyhxiamo.github.io/floating-profit-app/)
+[https://zyhxiamo123-d1gtgfpembc2f87f4-1439025874.tcloudbaseapp.com/](https://zyhxiamo123-d1gtgfpembc2f87f4-1439025874.tcloudbaseapp.com/)
 
-GitHub Pages 是备用官网。国内版上线后，主官网会迁移到 CloudBase 默认域名。
+CloudBase 默认域名是国内主官网。GitHub Pages 保留为备用镜像：
+
+[https://zyhxiamo.github.io/floating-profit-app/](https://zyhxiamo.github.io/floating-profit-app/)
 
 ## 本地开发
 

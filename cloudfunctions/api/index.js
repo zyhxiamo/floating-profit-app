@@ -6,6 +6,17 @@ const command = db.command;
 const REVIEWS = "reviews";
 const METRICS = "metrics";
 const DOWNLOAD_METRIC_ID = "downloads";
+const initializedCollections = new Set();
+
+async function ensureCollection(name) {
+  if (initializedCollections.has(name)) return;
+  try {
+    await db.createCollection(name);
+  } catch (error) {
+    if (!/exist|already/i.test(String(error.message || ""))) throw error;
+  }
+  initializedCollections.add(name);
+}
 
 function response(statusCode, payload, headers = {}) {
   return {
@@ -52,7 +63,7 @@ async function requireAdmin(event) {
   const adminEmail = String(process.env.ADMIN_EMAIL || "").trim().toLowerCase();
   const token = authorization(event);
   if (!authGatewayUrl || !adminEmail || !token) throw new Error("unauthorized");
-  const result = await fetch(`${authGatewayUrl}/auth/v1/user`, {
+  const result = await fetch(`${authGatewayUrl}/auth/v1/user/me`, {
     headers: { Authorization: token }
   });
   if (!result.ok) throw new Error("unauthorized");
@@ -61,6 +72,7 @@ async function requireAdmin(event) {
 }
 
 async function publicReviews() {
+  await ensureCollection(REVIEWS);
   const result = await db.collection(REVIEWS)
     .where({ status: "approved" })
     .orderBy("reviewedAt", "desc")
@@ -76,6 +88,7 @@ async function publicReviews() {
 }
 
 async function submitReview(event) {
+  await ensureCollection(REVIEWS);
   const body = parseBody(event);
   const nickname = cleanText(body.nickname, 20);
   const content = cleanText(body.content, 100);
@@ -92,6 +105,7 @@ async function submitReview(event) {
 
 async function countDownloads() {
   try {
+    await ensureCollection(METRICS);
     const result = await db.collection(METRICS).doc(DOWNLOAD_METRIC_ID).get();
     return Number(result.data?.[0]?.count || 0);
   } catch {
@@ -104,6 +118,7 @@ async function downloadCount() {
 }
 
 async function latestDownload() {
+  await ensureCollection(METRICS);
   const downloadUrl = process.env.DOWNLOAD_URL;
   if (!downloadUrl) return response(503, { message: "下载包正在准备中。" });
   try {
@@ -116,6 +131,7 @@ async function latestDownload() {
 
 async function adminReviews(event) {
   await requireAdmin(event);
+  await ensureCollection(REVIEWS);
   const status = cleanText(event.queryStringParameters?.status, 20) || "pending";
   const result = await db.collection(REVIEWS)
     .where({ status })
@@ -150,13 +166,13 @@ exports.main = async (event) => {
   const path = requestPath(event);
   if (method === "OPTIONS") return response(204, "");
   try {
-    if (method === "GET" && path.endsWith("/api/reviews")) return publicReviews();
-    if (method === "POST" && path.endsWith("/api/reviews")) return submitReview(event);
-    if (method === "GET" && path.endsWith("/api/download/count")) return downloadCount();
-    if (method === "GET" && path.endsWith("/api/download/latest")) return latestDownload();
-    if (method === "GET" && path.endsWith("/api/admin/reviews")) return adminReviews(event);
-    const match = path.match(/\/api\/admin\/reviews\/([^/]+)$/);
-    if (method === "PATCH" && match) return updateReview(event, match[1]);
+    if (method === "GET" && /^(?:\/api)?\/reviews$/.test(path)) return await publicReviews();
+    if (method === "POST" && /^(?:\/api)?\/reviews$/.test(path)) return await submitReview(event);
+    if (method === "GET" && /^(?:\/api)?\/download\/count$/.test(path)) return await downloadCount();
+    if (method === "GET" && /^(?:\/api)?\/download\/latest$/.test(path)) return await latestDownload();
+    if (method === "GET" && /^(?:\/api)?\/admin\/reviews$/.test(path)) return await adminReviews(event);
+    const match = path.match(/^(?:\/api)?\/admin\/reviews\/([^/]+)$/);
+    if (method === "PATCH" && match) return await updateReview(event, match[1]);
     return response(404, { message: "Not found" });
   } catch (error) {
     if (error.message === "unauthorized") return response(401, { message: "管理员登录已失效。" });
